@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tebak-Tebakan Angka</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #7DB9DE;
+            background-image: 
+                radial-gradient(circle at 100% 150%, #7DB9DE 24%, white 25%, white 28%, #7DB9DE 29%, #7DB9DE 36%, white 36%, white 40%, transparent 40%),
+                radial-gradient(circle at 0% 150%, #7DB9DE 24%, white 25%, white 28%, #7DB9DE 29%, #7DB9DE 36%, white 36%, white 40%, transparent 40%),
+                radial-gradient(circle at 50% 100%, white 10%, #7DB9DE 11%, #7DB9DE 23%, white 24%, white 30%, #7DB9DE 31%, #7DB9DE 43%, white 44%, white 50%, #7DB9DE 51%, #7DB9DE 63%, white 64%, white 71%, transparent 71%),
+                radial-gradient(circle at 100% 50%, white 5%, #7DB9DE 6%, #7DB9DE 15%, white 16%, white 20%, #7DB9DE 21%, #7DB9DE 30%, white 31%, white 35%, #7DB9DE 36%, #7DB9DE 45%, white 46%, white 49%, transparent 50%),
+                radial-gradient(circle at 0% 50%, white 5%, #7DB9DE 6%, #7DB9DE 15%, white 16%, white 20%, #7DB9DE 21%, #7DB9DE 30%, white 31%, white 35%, #7DB9DE 36%, #7DB9DE 45%, white 46%, white 49%, transparent 50%);
+            background-size: 100px 50px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+         h3 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 4px rgba(6, 107, 154, 0.581);
+        }
+        
+        .number-display {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .number {
+            font-size: 8rem;
+            font-weight: 800;
+            color: #3498db;
+            transition: all 0.5s ease;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        .controls {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .slider {
+            flex: 1;
+            height: 10px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: linear-gradient(to right, #3498db, #2ecc71);
+            border-radius: 5px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid #3498db;
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slider-value {
+            min-width: 80px;
+            text-align: center;
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .range-select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px solid #3498db;
+            font-size: 1rem;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .range-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.3);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .start-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .stop-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .pause-btn {
+            background: linear-gradient(to right, #f39c12, #e67e22);
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .info {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            text-align: left;
+        }
+
+        .copyright {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .number {
+                font-size: 5rem;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .slider-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .slider-value {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎲 Tebak-Tebakan Angka</h1>
+        <h3>untuk latihan 数字</h3>
+        
+        <div class="number-display">
+            <div class="number" id="numberDisplay">0</div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="rangeSelect">Rentang Angka:</label>
+                <select id="rangeSelect" class="range-select">
+                    <option value="10">1 - 10</option>
+                    <option value="100">1 - 100</option>
+                    <option value="1000">1 - 1,000</option>
+                    <option value="10000">1 - 10,000</option>
+                    <option value="100000">1 - 100,000</option>
+                    <option value="1000000">1 - 1,000,000</option>
+                    <option value="10000000">1 - 10,000,000</option>
+                    <option value="100000000">1 - 100,000,000</option>
+                    <option value="999999999">1 - 999,999,999</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="durationSlider">Durasi Kemunculan: <span id="durationValue">3 detik</span></label>
+                <div class="slider-container">
+                    <input type="range" min="2" max="15" value="3" class="slider" id="durationSlider">
+                    <div class="slider-value" id="durationDisplay">3 detik</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button class="start-btn" id="startBtn">Mulai</button>
+            <button class="pause-btn" id="pauseBtn">Jeda</button>
+            <button class="stop-btn" id="stopBtn">Berhenti</button>
+        </div>
+        
+        <div class="info">
+            <p><strong>Petunjuk Penggunaan:</strong></p>
+            <p>1. Pilih rentang angka yang diinginkan dari dropdown menu</p>
+            <p>2. Atur durasi kemunculan angka menggunakan slider (2-15 detik)</p>
+            <p>3. Klik "Mulai" untuk memulai generator angka acak</p>
+            <p>4. Gunakan "Jeda" untuk menghentikan sementara dan "Berhenti" untuk mengakhiri</p>
+        </div>
+        <div class="copyright">
+            <h5>Copyright © 2025 MADAVERSE.</h5>
+        </div>
+    </div>
+
+    <script>
+        // Elemen DOM
+        const numberDisplay = document.getElementById('numberDisplay');
+        const rangeSelect = document.getElementById('rangeSelect');
+        const durationSlider = document.getElementById('durationSlider');
+        const durationDisplay = document.getElementById('durationDisplay');
+        const durationValue = document.getElementById('durationValue');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        // Variabel kontrol
+        let timer = null;
+        let isRunning = false;
+        let currentDuration = 3000; // 3 detik dalam milidetik
+        
+        // Fungsi untuk menghasilkan angka acak berdasarkan rentang
+        function generateRandomNumber(max) {
+            // Menghasilkan angka acak dari 1 hingga max (inklusif)
+            return Math.floor(Math.random() * max) + 1;
+        }
+        
+        // Fungsi untuk menampilkan angka acak baru
+        function displayRandomNumber() {
+            const max = parseInt(rangeSelect.value);
+            const randomNumber = generateRandomNumber(max);
+            
+            // Animasi perubahan angka
+            numberDisplay.style.opacity = 0;
+            numberDisplay.style.transform = 'scale(0.8)';
+            
+            setTimeout(() => {
+                numberDisplay.textContent = randomNumber.toLocaleString();
+                numberDisplay.style.opacity = 1;
+                numberDisplay.style.transform = 'scale(1)';
+            }, 300);
+        }
+        
+        // Fungsi untuk memulai generator
+        function startGenerator() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            displayRandomNumber(); // Tampilkan angka pertama segera
+            timer = setInterval(displayRandomNumber, currentDuration);
+            
+            // Update UI
+            startBtn.disabled = true;
+            pauseBtn.disabled = false;
+            stopBtn.disabled = false;
+        }
+        
+        // Fungsi untuk menjeda generator
+        function pauseGenerator() {
+            if (!isRunning) return;
+            
+            clearInterval(timer);
+            isRunning = false;
+            
+            // Update UI
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+        }
+        
+        // Fungsi untuk menghentikan generator
+        function stopGenerator() {
+            clearInterval(timer);
+            isRunning = false;
+            numberDisplay.textContent = '0';
+            
+            // Update UI
+            startBtn.disabled = false;
+            pauseBtn.disabled = true;
+            stopBtn.disabled = true;
+        }
+        
+        // Event Listeners
+        startBtn.addEventListener('click', startGenerator);
+        pauseBtn.addEventListener('click', pauseGenerator);
+        stopBtn.addEventListener('click', stopGenerator);
+        
+        // Update durasi saat slider diubah
+        durationSlider.addEventListener('input', function() {
+            const seconds = parseInt(this.value);
+            currentDuration = seconds * 1000;
+            durationDisplay.textContent = `${seconds} detik`;
+            durationValue.textContent = `${seconds} detik`;
+            
+            // Jika generator sedang berjalan, restart dengan durasi baru
+            if (isRunning) {
+                clearInterval(timer);
+                timer = setInterval(displayRandomNumber, currentDuration);
+            }
+        });
+        
+        // Inisialisasi UI
+        pauseBtn.disabled = true;
+        stopBtn.disabled = true;
+        
+        // Animasi awal
+        setTimeout(() => {
+            document.querySelector('.container').style.opacity = 1;
+            document.querySelector('.container').style.transform = 'translateY(0)';
+        }, 100);
+    </script>
+</body>
+</html>
